@@ -12,15 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hw4.application.GetQueries.getQueries;
+import static org.hw4.application.storage.DataSource.closeConnection;
 
 public class DatabaseQueryService {
 
     public static void main(String[] args) {
-        findMaxSalaryWorker().forEach(System.out::println);
-        findMaxProjectClient().forEach(System.out::println);
-        findLongestProject().forEach(System.out::println);
-        findYoungestEldestWorker().forEach(System.out::println);
-        printProjectPrices().forEach(System.out::println);
+        try {
+            findMaxSalaryWorker().forEach(System.out::println);
+            findMaxProjectClient().forEach(System.out::println);
+            findLongestProject().forEach(System.out::println);
+            findYoungestEldestWorker().forEach(System.out::println);
+            printProjectPrices().forEach(System.out::println);
+        } catch (RuntimeException e){
+            throw e;
+        } finally {
+            closeConnection();
+        }
     }
 
     public static List<MaxSalaryWorker> findMaxSalaryWorker(){

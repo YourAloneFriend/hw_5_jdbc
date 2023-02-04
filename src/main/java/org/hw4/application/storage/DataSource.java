@@ -34,4 +34,13 @@ public class DataSource {
     public static Connection getConnection(){
         return connection;
     }
+
+    public static void closeConnection(){
+        try {
+            connection.close();
+            System.out.println("Connection is closed.");
+        } catch (SQLException e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }

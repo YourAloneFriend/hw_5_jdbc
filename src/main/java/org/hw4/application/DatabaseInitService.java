@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import static org.hw4.application.GetQueries.getQueries;
+import static org.hw4.application.storage.DataSource.closeConnection;
 
 public class DatabaseInitService {
 
@@ -16,6 +17,8 @@ public class DatabaseInitService {
                 statement.executeUpdate();
             } catch (SQLException e) {
                 throw new RuntimeException(e.getMessage());
+            } finally {
+                closeConnection();
             }
     }
 }
