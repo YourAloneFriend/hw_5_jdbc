@@ -11,9 +11,10 @@ import java.util.Properties;
 
 public class DataSource {
 
-    private final static Connection connection;
+    private Connection connection;
+    private static DataSource dataSource;
 
-    static {
+    private DataSource(){
         try(InputStream fis = DataSource.class.getClassLoader().getResourceAsStream("application.properties")) {
             if(fis == null)
                 throw new IOException("Can't find this file.");
@@ -24,23 +25,23 @@ public class DataSource {
             String url = properties.getProperty("mysql.url");
             String username = properties.getProperty("mysql.username");
             String password = properties.getProperty("mysql.password");
-            System.out.printf("%s, %s, %s\n", url, username, password);
             connection = DriverManager.getConnection(url, username, password);
         } catch (SQLException | IOException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
-    public static Connection getConnection(){
-        return connection;
-    }
-
-    public static void closeConnection(){
+    public static DataSource getInstance(){
         try {
-            connection.close();
-            System.out.println("Connection is closed.");
+            if (dataSource == null || dataSource.getConnection().isClosed())
+                dataSource = new DataSource();
+            return dataSource;
         } catch (SQLException e){
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    public Connection getConnection(){
+        return connection;
     }
 }
